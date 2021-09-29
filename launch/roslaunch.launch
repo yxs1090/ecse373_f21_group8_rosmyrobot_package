@@ -1,0 +1,4 @@
+<launch>
+  <arg name="robot_name" default="robot0" />
+  <node name="rosmyrobot_node" type="rosexe_node" pkg="rosmyrobot_package" args="__ns:=$(arg robot_name)"/>
+</launch>
