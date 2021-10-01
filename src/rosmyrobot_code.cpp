@@ -13,7 +13,7 @@
 geometry_msgs::Twist twist_cmd;
 ros::Publisher twist_pub;
 
-const double warn_range = 0.5;  //warn check distance
+const double warn_range = 0.3;  //warn check distance
 double default_period_hz = 10;  //hz
 double default_linear_x = 0.5;  // (m/s)
 double default_yaw_rate = 0.5;  // rad/s
@@ -67,7 +67,7 @@ void publishTwistCmd(double linear_x, double angular_z)
     twist_pub.publish(twist_cmd);
 }
 
-void rosmyrobot(double lidar_l, double lidar_f, double lidar_r)
+void rosmyrobot(double lidar_r, double lidar_f, double lidar_l)
 {
   unsigned char flag = 0;
  
@@ -90,8 +90,8 @@ void rosmyrobot(double lidar_l, double lidar_f, double lidar_r)
         break;
         
       case 0x02: // front warn, left and right ok, compare left and right value to turn
-        if(lidar_l > lidar_r)  publishTwistCmd(0, default_yaw_rate);
-        else  publishTwistCmd(0, -default_yaw_rate);
+        /*if(lidar_l > lidar_r)  */publishTwistCmd(0, default_yaw_rate);
+        //else  publishTwistCmd(0, -default_yaw_rate);
         break;
       
       case 0x04: // right warn, turn left
@@ -114,7 +114,7 @@ void rosmyrobot(double lidar_l, double lidar_f, double lidar_r)
         publishTwistCmd(2*default_linear_x, 0);
         break;
         
-      default: // no warning, ues the des_cel
+      default: // no warning, ues the des_vel
         publishTwistCmd(des_cmd_array[0], des_cmd_array[1]);
         break;     
     }
